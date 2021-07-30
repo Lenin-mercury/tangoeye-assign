@@ -17,8 +17,7 @@ import Container from '@material-ui/core/Container';
 //redux
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-
-
+import {register} from '../redux/actions/auth';
 
 function Copyright() {
   return (
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register = () => {
+const Register = ({register}) => {
   const classes = useStyles();
 
   const [formData, setFormdata] = useState({
@@ -62,7 +61,6 @@ const Register = () => {
     email: '',
     password:'',
     password2:''
-
 });
 
 const {name, lastname, email, password, password2} = formData;
@@ -75,7 +73,15 @@ const {name, lastname, email, password, password2} = formData;
         //  setAlert('Passwords do not match', 'danger');
         console.log("Password do not match");
       } else {
-        console.log("data submitted", name, email);
+        console.log("data submitted", name, email, password, password2);
+        register(name, email, password);
+        setFormdata({
+          name : '',
+          lastname:'',
+          email: '',
+          password:'',
+          password2:''
+        })
       }
   }
 
@@ -198,6 +204,7 @@ const {name, lastname, email, password, password2} = formData;
 
 
 Register.propTypes = {
+  register: PropTypes.func.isRequired,
 
 }
 
@@ -206,7 +213,7 @@ const mapStateToProps =  state => ({
 
 })
 
-export default connect(mapStateToProps) (Register);
+export default connect(mapStateToProps, {register}) (Register);
 
 
 
